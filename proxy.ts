@@ -5,6 +5,7 @@ import { authConfig } from "@/auth.config";
 const { auth } = NextAuth(authConfig);
 
 const ADMIN_ONLY_PREFIXES = ["/commission-rules", "/password-resets"];
+const ADMIN_HR_PREFIXES = ["/payroll"];
 const PUBLIC_PATHS = ["/login", "/forgot-password"];
 
 export default auth((req) => {
@@ -22,9 +23,16 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
+  const role = req.auth?.user?.role;
+
+  if (ADMIN_ONLY_PREFIXES.some((p) => pathname.startsWith(p)) && role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
   if (
-    ADMIN_ONLY_PREFIXES.some((p) => pathname.startsWith(p)) &&
-    req.auth?.user?.role !== "ADMIN"
+    ADMIN_HR_PREFIXES.some((p) => pathname.startsWith(p)) &&
+    role !== "ADMIN" &&
+    role !== "HR"
   ) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }

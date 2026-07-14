@@ -102,6 +102,7 @@ export default async function EmployeeDetailPage({
               departmentId: employee.departmentId,
               managerId: employee.managerId,
               status: employee.status,
+              baseSalary: Number(employee.baseSalary),
               hireDate: employee.hireDate.toISOString().slice(0, 10),
             }}
           />

@@ -55,6 +55,7 @@ export function EmployeeForm({
       departmentId: "",
       managerId: null,
       status: "ACTIVE",
+      baseSalary: 0,
       hireDate: new Date().toISOString().slice(0, 10),
       ...defaultValues,
     },
@@ -264,6 +265,25 @@ export function EmployeeForm({
               <FormLabel>到職日期</FormLabel>
               <FormControl>
                 <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="baseSalary"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>底薪（月薪）</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min="0"
+                  step="1"
+                  {...field}
+                  onChange={(e) => field.onChange(e.target.valueAsNumber || 0)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

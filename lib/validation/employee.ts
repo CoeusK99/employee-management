@@ -9,6 +9,7 @@ export const employeeSchema = z.object({
   departmentId: z.string().min(1, "請選擇部門"),
   managerId: z.string().nullable().optional(),
   status: z.enum(["ACTIVE", "ON_LEAVE", "OFFBOARDED"]),
+  baseSalary: z.number().min(0, "底薪不可為負數"),
   hireDate: z.string().min(1, "必填"),
 });
 

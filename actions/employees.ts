@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
+import { Prisma } from "@/app/generated/prisma/client";
 import {
   getCurrentUser,
   requireRole,
@@ -28,14 +29,22 @@ async function wouldCreateCycle(employeeId: string, proposedManagerId: string) {
   return false;
 }
 
+function canSeeSalary(role: string) {
+  return role === "ADMIN" || role === "HR";
+}
+
 export async function listEmployees() {
   const user = await getCurrentUser();
   const ids = await scopeEmployeeIds(user);
-  return prisma.employee.findMany({
+  const employees = await prisma.employee.findMany({
     where: ids ? { id: { in: ids } } : undefined,
     orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
     include: { department: true, manager: true },
   });
+  if (!canSeeSalary(user.role)) {
+    for (const emp of employees) emp.baseSalary = new Prisma.Decimal(0);
+  }
+  return employees;
 }
 
 export async function getEmployee(id: string) {
@@ -44,10 +53,15 @@ export async function getEmployee(id: string) {
   if (ids && !ids.includes(id)) {
     throw new UnauthorizedError("無權查看此員工");
   }
-  return prisma.employee.findUniqueOrThrow({
+  const employee = await prisma.employee.findUniqueOrThrow({
     where: { id },
     include: { department: true, manager: true, reports: true },
   });
+  if (!canSeeSalary(user.role)) {
+    employee.baseSalary = new Prisma.Decimal(0);
+    for (const report of employee.reports) report.baseSalary = new Prisma.Decimal(0);
+  }
+  return employee;
 }
 
 export async function listDepartmentOptions() {

@@ -52,6 +52,11 @@ enum ResetRequestStatus {
   RESOLVED
 }
 
+enum PayrollStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
@@ -91,12 +96,14 @@ model Employee {
   manager         Employee?               @relation("OrgChart", fields: [managerId], references: [id])
   reports         Employee[]              @relation("OrgChart")
   status          EmploymentStatus        @default(ACTIVE)
+  baseSalary      Decimal                 @default(0) @db.Decimal(14, 2)
   hireDate        DateTime
   terminationDate DateTime?
   user            User?
   salesRecords    SalesRecord[]
   targets         Target[]
   calculations    CommissionCalculation[]
+  payrollRecords  PayrollRecord[]
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
 }
@@ -138,6 +145,25 @@ model Target {
   createdAt   DateTime   @default(now())
 
   @@unique([employeeId, periodType, periodKey])
+}
+
+model PayrollRecord {
+  id              String        @id @default(cuid())
+  employeeId      String
+  employee        Employee      @relation(fields: [employeeId], references: [id])
+  periodKey       String // "2026-07"
+  baseSalary      Decimal       @db.Decimal(14, 2)
+  commissionTotal Decimal       @db.Decimal(14, 2)
+  adjustments     Json // [{ label: string, amount: number }] — 加項為正、減項為負
+  totalAmount     Decimal       @db.Decimal(14, 2)
+  status          PayrollStatus @default(DRAFT)
+  publishedAt     DateTime?
+  publishedBy     String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([employeeId, periodKey])
+  @@index([periodKey, status])
 }
 
 model PasswordResetRequest {

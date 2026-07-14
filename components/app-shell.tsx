@@ -20,6 +20,8 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/sales", label: "銷售紀錄", roles: ["ADMIN", "MANAGER", "SALES_REP"] },
   { href: "/commission-rules", label: "獎金規則", roles: ["ADMIN"] },
   { href: "/commissions", label: "獎金結算", roles: ["ADMIN", "MANAGER", "SALES_REP"] },
+  { href: "/payroll", label: "薪資管理", roles: ["ADMIN", "HR"] },
+  { href: "/my-salary", label: "我的薪資", roles: ["ADMIN", "MANAGER", "SALES_REP", "HR"] },
   { href: "/reports", label: "報表", roles: ["ADMIN", "MANAGER", "SALES_REP"] },
   { href: "/password-resets", label: "密碼重設", roles: ["ADMIN"] },
 ];
