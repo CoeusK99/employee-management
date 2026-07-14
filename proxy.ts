@@ -4,13 +4,14 @@ import { authConfig } from "@/auth.config";
 
 const { auth } = NextAuth(authConfig);
 
-const ADMIN_ONLY_PREFIXES = ["/commission-rules"];
+const ADMIN_ONLY_PREFIXES = ["/commission-rules", "/password-resets"];
+const PUBLIC_PATHS = ["/login", "/forgot-password"];
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
   const isAuthed = !!req.auth?.user?.role;
 
-  if (pathname === "/login") {
+  if (PUBLIC_PATHS.includes(pathname)) {
     if (isAuthed) return NextResponse.redirect(new URL("/dashboard", req.url));
     return NextResponse.next();
   }

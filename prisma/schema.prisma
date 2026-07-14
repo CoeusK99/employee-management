@@ -39,6 +39,11 @@ enum CalcStatus {
   FINALIZED
 }
 
+enum ResetRequestStatus {
+  PENDING
+  RESOLVED
+}
+
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
@@ -124,6 +129,17 @@ model Target {
   createdAt   DateTime   @default(now())
 
   @@unique([employeeId, periodType, periodKey])
+}
+
+model PasswordResetRequest {
+  id         String             @id @default(cuid())
+  email      String
+  status     ResetRequestStatus @default(PENDING)
+  createdAt  DateTime           @default(now())
+  resolvedAt DateTime?
+  resolvedBy String?
+
+  @@index([status, createdAt])
 }
 
 model CommissionCalculation {

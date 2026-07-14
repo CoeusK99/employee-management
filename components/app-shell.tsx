@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/commission-rules", label: "獎金規則", roles: ["ADMIN"] },
   { href: "/commissions", label: "獎金結算", roles: ["ADMIN", "MANAGER", "SALES_REP"] },
   { href: "/reports", label: "報表", roles: ["ADMIN", "MANAGER", "SALES_REP"] },
+  { href: "/password-resets", label: "密碼重設", roles: ["ADMIN"] },
 ];
 
 const ROLE_LABEL: Record<Role, string> = {

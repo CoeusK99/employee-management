@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -83,6 +84,12 @@ function LoginForm() {
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? "登入中..." : "登入"}
             </Button>
+            <Link
+              href="/forgot-password"
+              className="text-center text-sm text-muted-foreground hover:underline"
+            >
+              忘記密碼？
+            </Link>
           </form>
         </CardContent>
       </Card>
