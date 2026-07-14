@@ -1,0 +1,6 @@
+-- CreateEnum
+CREATE TYPE "EmployeeType" AS ENUM ('DOCTOR', 'NURSE', 'CONSULTANT', 'LOGISTICS', 'SCALP_SPECIALIST');
+
+-- AlterTable
+ALTER TABLE "Employee" ADD COLUMN     "type" "EmployeeType" NOT NULL DEFAULT 'CONSULTANT';
+

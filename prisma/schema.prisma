@@ -23,6 +23,14 @@ enum EmploymentStatus {
   OFFBOARDED
 }
 
+enum EmployeeType {
+  DOCTOR           // 醫師
+  NURSE            // 護理師
+  CONSULTANT       // 諮詢業務
+  LOGISTICS        // 後勤
+  SCALP_SPECIALIST // 頭管師
+}
+
 enum RuleType {
   PERCENTAGE_TIER
   KPI_BONUS
@@ -76,6 +84,7 @@ model Employee {
   lastName        String
   email           String                  @unique
   title           String
+  type            EmployeeType            @default(CONSULTANT)
   departmentId    String
   department      Department              @relation(fields: [departmentId], references: [id])
   managerId       String?

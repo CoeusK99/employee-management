@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { employeeSchema, type EmployeeFormValues } from "@/lib/validation/employee";
+import { EMPLOYEE_TYPES, EMPLOYEE_TYPE_LABEL } from "@/lib/employee-type";
 import { createEmployee, updateEmployee } from "@/actions/employees";
 
 type Option = { id: string; name?: string; firstName?: string; lastName?: string; title?: string };
@@ -50,6 +51,7 @@ export function EmployeeForm({
       lastName: "",
       email: "",
       title: "",
+      type: "CONSULTANT",
       departmentId: "",
       managerId: null,
       status: "ACTIVE",
@@ -129,6 +131,34 @@ export function EmployeeForm({
               <FormControl>
                 <Input {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>員工類型</FormLabel>
+              <Select
+                items={EMPLOYEE_TYPES.map((t) => ({ value: t, label: EMPLOYEE_TYPE_LABEL[t] }))}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {EMPLOYEE_TYPES.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {EMPLOYEE_TYPE_LABEL[t]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

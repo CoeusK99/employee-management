@@ -4,13 +4,15 @@ import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
-import type { EmploymentStatus } from "@/app/generated/prisma/enums";
+import { EMPLOYEE_TYPE_LABEL } from "@/lib/employee-type";
+import type { EmployeeType, EmploymentStatus } from "@/app/generated/prisma/enums";
 
 type EmployeeRow = {
   id: string;
   firstName: string;
   lastName: string;
   title: string;
+  type: EmployeeType;
   status: EmploymentStatus;
   department: { name: string };
   manager: { firstName: string; lastName: string } | null;
@@ -36,6 +38,13 @@ const columns: ColumnDef<EmployeeRow>[] = [
       <Link href={`/employees/${row.original.id}`} className="font-medium hover:underline">
         {row.original.lastName} {row.original.firstName}
       </Link>
+    ),
+  },
+  {
+    accessorKey: "type",
+    header: "類型",
+    cell: ({ row }) => (
+      <Badge variant="outline">{EMPLOYEE_TYPE_LABEL[row.original.type]}</Badge>
     ),
   },
   { accessorKey: "title", header: "職稱" },

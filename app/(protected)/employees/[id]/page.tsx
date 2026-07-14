@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/authorization";
 import { getEmployee, getOrgSubtree, listDepartmentOptions, listManagerOptions } from "@/actions/employees";
 import { listTargetsForEmployee } from "@/actions/targets";
 import { EmployeeForm } from "@/components/employees/employee-form";
+import { EMPLOYEE_TYPE_LABEL } from "@/lib/employee-type";
 import { OrgTree } from "@/components/employees/org-tree";
 import { TargetManager } from "@/components/targets/target-manager";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,6 +39,7 @@ export default async function EmployeeDetailPage({
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2 text-sm">
+            <div>類型：{EMPLOYEE_TYPE_LABEL[employee.type]}</div>
             <div>職稱：{employee.title}</div>
             <div>部門：{employee.department.name}</div>
             <div>
@@ -96,6 +98,7 @@ export default async function EmployeeDetailPage({
               lastName: employee.lastName,
               email: employee.email,
               title: employee.title,
+              type: employee.type,
               departmentId: employee.departmentId,
               managerId: employee.managerId,
               status: employee.status,
